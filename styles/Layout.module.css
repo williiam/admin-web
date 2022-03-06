@@ -1,0 +1,9 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+}
+
+.main {
+  padding: 5rem 0;
+  font-size: 1.25rem;
+}
