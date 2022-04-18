@@ -8,7 +8,7 @@ export const lightTheme = createTheme(theme, {
     type: 'light',
     primary: {
       main: '#7188B4',
-      dark: '#7188B4',
+      dark: '#375389',
       light: '#7188B4'
     },
     antiPrimary: {

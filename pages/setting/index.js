@@ -19,6 +19,16 @@ import Tab from "@mui/material/Tab";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 
+//設定：
+/*
+
+
+取消訂單規定
+退款規定
+轉贈規定
+
+*/
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,

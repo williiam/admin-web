@@ -19,10 +19,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
-import Form1 from "../../shared/components/product/Form1";
-import Form2 from "../../shared/components/product/Form2";
-import Form3 from "../../shared/components/product/Form3";
+import Form1 from "../../shared/components/newProduct/Form1";
+import Form2 from "../../shared/components/newProduct/Form2";
+import Form3 from "../../shared/components/newProduct/Form3";
 import Alert from '@mui/material/Alert';
+import moment from "moment";
+
 const steps = ["基本資訊", "規格設定", "銷售資訊"];
 
 const Item = styled('div')(({ theme }) => ({
@@ -33,35 +35,29 @@ const Item = styled('div')(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const actions = [
-  { icon: <FileCopyIcon />, name: "Copy" },
-  { icon: <SaveIcon />, name: "Save" },
-  { icon: <PrintIcon />, name: "Print" },
-  { icon: <ShareIcon />, name: "Share" },
-];
-
 // const todayDate=
 
 const defaultProduct = {
   name: "",
   description: "",
-  brand: "",
   category: "",
-  subCategory: "",
-  brand: "",
+  sub_category: "",
+  brand: "0",
   img_file_name: "",
   img_file: "",
   price: "",
   qty: "",
-  hasVariant: false,
-  shippingMethod: "PICK_UP_AND_PAY",
+  has_variant: false,
+  paymentMethod: "PICK_UP_AND_PAY",
+  shipping_method: "PICK_UP_AND_PAY",
   notice: "",
-  saleStatus:"ACTIVE",
-  sellingMode: "GROUP_BUY",
-  groupBuyEndDate: (()=>{let dt = new Date();
-    return dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();})(),
-  groupBuyUpperAmount:"",
-  groupBuyLowerAmount:"",
+  sale_status:"ACTIVE",
+  selling_mode: "GROUP_BUY",
+  group_buy_end_date: (()=>{return moment(new Date()).format("YYYY-MM-DD")})(),
+  group_buy_upper_qty:"",
+  group_buy_lower_qty:"",
+  group_buy_discount:1,
+  group_buy_price:"",
   variant: [],
   promotion: [],
 };
@@ -74,12 +70,6 @@ export default function NewProduct(props) {
   const [product, setProduct] = React.useState(defaultProduct);
   const formEl1 = React.useRef();
 
-  const performSubmit =() => {
-    //Currently not calling the submit on the form
-    formEl1.current && formEl1.current.submit();
-    console.log('formEl1.current :', formEl1.current);
-  }
-
   const isStepOptional = (step) => {
     return step === 4;
   };
@@ -87,19 +77,6 @@ export default function NewProduct(props) {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (user?.result?.name) {
-  //     checkRequiredField2();
-  //     const data = await api.createFeedBack(feedBackData);
-  //     setResponse(data);
-  //     window.scrollTo(0, 0);
-  //     setOpen(true);
-  //     history.push(`/course/${feedBackData?.course}`);
-  //     clear();
-  //   }
-  // };
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -135,18 +112,9 @@ export default function NewProduct(props) {
     setActiveStep(0);
   };
 
-  function dropdownRender(menus) {
-    return <Box>{menus}</Box>;
-  }
-
-  function handleAreaClick(e, label, option) {
-    e.stopPropagation();
-    console.log("clicked", label, option);
-  }
-
   const getformContent = () => {
     if (activeStep == 0) {
-      return <Form1 product={product} setProduct={setProduct} formEl1={formEl1} activeStep={activeStep} handleBack={handleBack} handleNext={handleNext}/>;
+      return <Form1 product={product} setProduct={setProduct} activeStep={activeStep} handleBack={handleBack} handleNext={handleNext}/>;
     }
     if (activeStep == 1) {
       return <Form2 product={product} setProduct={setProduct} activeStep={activeStep} handleBack={handleBack} handleNext={handleNext}/>;
@@ -162,7 +130,7 @@ export default function NewProduct(props) {
         <Grid item xs={12}>
           <Item>
             <Typography variant="h6" styles={{ textAlign: "left" ,lineHeight:"18px",fontSize:"18px"}}>
-              新增產品
+              新增商品
             </Typography>
           </Item>
         </Grid>
@@ -205,35 +173,11 @@ export default function NewProduct(props) {
                 <Box >
                   {getformContent()}
                 </Box>
-                {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                  <Button
-                    color="inherit"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    sx={{ mr: 1 }}
-                  >
-                    上ㄧ步
-                  </Button>
-                  <Box sx={{ flex: "1 1 auto" }} />
-                  {isStepOptional(activeStep) && (
-                    <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                      跳過
-                    </Button>
-                  )} 
-
-                  <Button onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? "完成並下架" : ""}
-                  </Button>
-                  <Button onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? "完成並上架" : "下一步"}
-                  </Button> 
-                </Box> */}
               </React.Fragment>
             )}
           </Box>
         </Grid>
       </Grid>
-
       {/* <SpeedDial
         ariaLabel="SpeedDial basic example"
         sx={{ position: "absolute", bottom: 16, right: 16 }}

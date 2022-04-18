@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: ' http://localhost:80', headers: {
+const API = axios.create({ baseURL: ' http://localhost:5555', headers: {
   "Content-type": "application/json"
 } },);
 // const API = axios.create({ baseURL: 'https://desolate-stream-68947.herokuapp.com', headers: {
@@ -8,11 +8,17 @@ const API = axios.create({ baseURL: ' http://localhost:80', headers: {
 // } },);
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem('profile')) {
-    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+  if(localStorage==undefined){
+
+  }
+  else{
+
+    if (localStorage.getItem('profile')) {
+      req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+    }
+    return req;
   }
 
-  return req;
 });
 
 export const fetchPost = (id) => API.get(`/posts/${id}`);
@@ -60,3 +66,8 @@ export const googleSignIn = (formData) => API.post('/user/googlesignin', formDat
 export const oauth = (formData) => API.post('/user/0auth', formData);
 
 export const createProduct = (product) => API.post(`/product/create`, product);
+export const updateProduct = (product) => API.post(`/product/update`, product);
+export const deleteProduct = (product) => API.post(`/product/delete`, product);
+export const changeProductSaleStatus = (product) => API.post(`/product/update/status`, product);
+export const fetchAllProduct = (sellerData) => API.post('/product/all', sellerData);
+export const fetchProduct = (sellerData) => axios.post('http://localhost:5555/product/get', sellerData);

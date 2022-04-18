@@ -1,68 +1,155 @@
-import packageJson from "../package.json";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import LinkUI from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Paper from "@mui/material/Paper";
+import Link from "next/link";
+import * as api from '../shared/utils/api'
+import { useRouter } from 'next/router';
 
-export default function Home(props) {
-  /** You can access to liff and liffError object through the props.
-   *  const { liff, liffError } = props;
-   *  console.log(liff.getVersion());
-   *
-   *  Learn more about LIFF API documentation (https://developers.line.biz/en/reference/liff)
-   **/
+function Copyright(props) {
   return (
-    <div>
-      <div className="home">
-        <h1 className="home__title">
-          Welcome to <br />
-          <a
-            className="home__title__link"
-            href="https://developers.line.biz/en/docs/liff/overview/"
-          >
-            LIFF Starter!
-          </a>
-        </h1>
-        <div className="home__badges">
-          <span className="home__badges__badge badge--primary">
-            LIFF Starter
-          </span>
-          <span className="home__badges__badge badge--secondary">nextjs</span>
-          <span className="home__badges__badge badge--primary">
-            {packageJson.version}
-          </span>
-          <a
-            href="https://github.com/line/line-liff-v2-starter"
-            target="_blank"
-            rel="noreferrer"
-            className="home__badges__badge badge--secondary"
-          >
-            GitHub
-          </a>
-        </div>
-        <div className="home__buttons">
-          <a
-            href="https://developers.line.biz/en/docs/liff/developing-liff-apps/"
-            target="_blank"
-            rel="noreferrer"
-            className="home__buttons__button button--primary"
-          >
-            LIFF Documentation
-          </a>
-          <a
-            href="https://liff-playground.netlify.app/"
-            target="_blank"
-            rel="noreferrer"
-            className="home__buttons__button button--tertiary"
-          >
-            LIFF Playground
-          </a>
-          <a
-            href="https://developers.line.biz/console/"
-            target="_blank"
-            rel="noreferrer"
-            className="home__buttons__button button--secondary"
-          >
-            LINE Developers Console
-          </a>
-        </div>
-      </div>
-    </div>
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        合作社團購網
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+const theme = createTheme();
+
+export default function Login() {
+
+  // const [form, setForm] = useState(initialState);
+  // const handleChange = (e) =>
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+
+  const router = useRouter();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    // eslint-disable-next-line no-console
+    console.log({
+      email: data.get('email'),
+      password: data.get('password'),
+    });
+    const userCredential = {email: data.get('email'),password: data.get('password')}
+
+    const response = await api.signIn(userCredential)
+
+    console.log(response);
+
+    localStorage.setItem('profile', JSON.stringify({ ...response?.data }));
+
+    if(response.status==200 && response.data){
+      router.push("/home",)
+    }
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main"  
+        style={{
+          maxWidth:'530px',
+          color: '#6E9B6D'
+          }}>
+        <Paper elevation={3}
+          sx={{
+            padding: '0px 20px',
+            marginTop: 7,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            boderRadius: '5px'
+          }}
+        >
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            登入
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              // value={form.email}
+              // onChange={handleChange}
+              />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              // value={form.password}
+              // onChange={handleChange}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <LinkUI href="/" variant="body2">
+                <Link href="/" variant="body2">
+
+                  Forgot password?
+                </Link>
+                </LinkUI>
+              </Grid>
+              <Grid item>
+                <LinkUI href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </LinkUI>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+          </Paper>
+      </Container>
+    </ThemeProvider>
   );
 }

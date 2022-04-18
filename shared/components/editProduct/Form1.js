@@ -32,37 +32,93 @@ import InputLabel from "@mui/material/InputLabel";
 
 const categories = [
   {
-    value: "零食",
     label: "零食",
+    value: "100",
     children: [
       {
-        value: "泡麵",
+        value: "1",
         label: "泡麵",
       },
       {
-        value: "餅乾",
+        value: "2",
         label: "餅乾",
       },
       {
-        value: "洋芋片",
-        label: "洋芋片",
+        value: "3",
+        label: "薯片,洋芋片",
+      },
+      {
+        value: "4",
+        label: "果乾",
+      },
+      {
+        value: "5",
+        label: "堅果",
+      },
+      {
+        value: "6",
+        label: "甜食,糖果",
+      },
+      {
+        value: "7",
+        label: "巧克力",
+      },
+      {
+        value: "8",
+        label: "其他",
+      },
+      {
+        value: "9",
+        label: "布丁,果凍",
+      },
+      {
+        value: "10",
+        label: "乾貨零食",
+      },
+      {
+        value: "11",
+        label: "海苔",
       },
     ],
   },
   {
-    value: "飲品",
+    value: "200",
     label: "飲品",
     children: [
       {
-        value: "水",
+        value: "21",
         label: "水",
       },
       {
-        value: "碳酸飲料",
+        value: "22",
+        label: "氣泡水",
+      },
+      {
+        value: "23",
+        label: "鮮乳",
+      },
+      {
+        value: "24",
+        label: "即飲咖啡",
+      },
+      {
+        value: "25",
+        label: "即飲茶",
+      },
+      {
+        value: "26",
         label: "碳酸飲料",
       },
       {
-        value: "果汁",
+        value: "27",
+        label: "燕麥飲",
+      },
+      {
+        value: "28",
+        label: "運動飲料",
+      },
+      {
+        value: "29",
         label: "果汁",
       },
     ],
@@ -78,14 +134,14 @@ const check_file = (e) => {
     "png",
     "jpg",
     "jpeg",
-    "pdf",
-    "xlsx",
-    "docx",
-    "pptx",
-    "xls",
-    "doc",
-    "ppt",
-    "txt",
+    // "pdf",
+    // "xlsx",
+    // "docx",
+    // "pptx",
+    // "xls",
+    // "doc",
+    // "ppt",
+    // "txt",
   ];
   const fileSize = e.size / 1024 / 1024; // in MiB
   if (fileSize > 20) {
@@ -99,7 +155,8 @@ const check_file = (e) => {
   if (!valid_type.includes(file_type)) {
     check_result = false;
     message =
-      '檔案格式不符合規定，以下為合格的檔案格式："png","jpg","jpeg","pdf","xlsx","docx","pptx","txt"';
+      '檔案格式不符合規定，以下為合格的檔案格式："png","jpg","jpeg"';
+      // '檔案格式不符合規定，以下為合格的檔案格式："png","jpg","jpeg","pdf","xlsx","docx","pptx","txt"';
   }
 
   return { check_result, message };
@@ -108,17 +165,16 @@ const check_file = (e) => {
 export default function Form1({
   product,
   setProduct,
-  formEl1,
   activeStep,
   handleBack,
-  handleNext,
+  handleNext
 }) {
   const breadcrumbs = [
     <Typography key="3" color="text.primary" underline="hover">
       {product.category}
     </Typography>,
     <Typography key="4" color="text.primary">
-      {product.subCategory}
+      {product.sub_category}
     </Typography>,
   ];
 
@@ -127,18 +183,7 @@ export default function Form1({
   }
 
   return (
-    <form
-      autoComplete="off"
-      ref={formEl1}
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log("product :", product);
-        checkFiled();
-        handleNext();
-    window.scrollTo(0, 0);
-
-      }}
-    >
+    <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h6" styles={{ textAlign: "left" }}>
@@ -168,7 +213,7 @@ export default function Form1({
             <div>
               <Cascader
                 options={categories}
-                placeholder="Please select"
+                placeholder="請選擇商品種類"
                 setDepartment={() => {}}
                 product={product}
                 setProduct={setProduct}
@@ -224,30 +269,8 @@ export default function Form1({
 
       </Grid>
       <React.Fragment>
-        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Button
-            color="inherit"
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}
-          >
-            上ㄧ步
-          </Button>
-          <Box sx={{ flex: "1 1 auto" }} />
-          {/* {isStepOptional(activeStep) && (
-                    <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                      跳過
-                    </Button>
-                  )} */}
-
-          <Button type="submit">
-            {activeStep === steps.length - 1 ? "完成並下架" : ""}
-          </Button>
-          <Button type="submit">
-            {activeStep === steps.length - 1 ? "完成並上架" : "下一步"}
-          </Button>
-        </Box>
+      <Divider />
       </React.Fragment>
-    </form>
+    </>
   );
 }

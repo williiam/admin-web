@@ -15,9 +15,10 @@ import { useEffect } from 'react';
 
 const useStyles = makeStyles(theme => createStyles({
   menuButton: {
-    color: `${theme.palette.primary.main} !important`,
+    color: `${theme.palette.primary.dark} !important`,
     backgroundColor: `${theme.palette.background.default} !important`,
     cursor: 'pointer',
+    fontSize: '1.3em'
   },
   dropdownContainer: {
     '& .MuiButton-root': {
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => createStyles({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      fontSize: '1.1rem',
+      fontSize: '1.3rem',
       fontWeight: 500,
       fontFamily: `'Noto Sans TC', sans-serif`,
       padding: '1px 10px'
@@ -74,11 +75,11 @@ const Cascader = ({ options, placeholder, setDepartment, product, setProduct }) 
     setAnchorEl(null);
     handleChange2(null, index);
     setAnchorE2(null);
-    setText(`${labels[value]?.value} / ${subItems[index]?.value}`);
+    setText(`${labels[value]?.label} / ${subItems[index]?.label}`);
     setDepartment(subItems[index].value);
     console.log('optionIndex :', optionIndex);
     console.log('options[optionIndex].value :', options[optionIndex].value);
-    setProduct({ ...product, category: options[optionIndex].value,subCategory: subItems[index].value })
+    setProduct({ ...product, category: options[optionIndex].value,sub_category: subItems[index].value })
   };
 
   const handleClose = () => {
@@ -112,7 +113,7 @@ const Cascader = ({ options, placeholder, setDepartment, product, setProduct }) 
             onClick={(event) => handleMenuItemClick(event, i, tabLabel.children)}
             className={ classes.menu }
           >
-            {tabLabel.value}
+            {tabLabel.label}
             <ChevronRightIcon fontSize="small"/>
           </MenuItem>
         ))}
@@ -133,7 +134,7 @@ const Cascader = ({ options, placeholder, setDepartment, product, setProduct }) 
             selected={i === value2}
             onClick={(event) => handleMenuItemClick2(event, i)}
           >
-            {tabLabel.value}
+            {tabLabel.label}
           </MenuItem>
         ))}
       </Menu>

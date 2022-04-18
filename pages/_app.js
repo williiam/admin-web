@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import Layout from "../shared/components/Layout";
 import { ThemeProvider, createTheme, makeStyles } from '@material-ui/core/styles';
 import { lightTheme } from "../shared/theme/lightTheme";
-
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 function MyApp({ Component, pageProps, ...appProps }) {
   const [liffObject, setLiffObject] = useState(null);
   const [liffError, setLiffError] = useState(null);
@@ -45,20 +48,26 @@ function MyApp({ Component, pageProps, ...appProps }) {
   pageProps.liff = liffObject;
   pageProps.liffError = liffError;
 
+  const queryClient = new QueryClient()
 
   const getContent = () => {
-    if ([`/login`].includes(appProps.router.pathname))
-      return <Component {...pageProps} />;
-      return (
-        <Layout>
+    if ([`/home`,`/member`,`/member/notify`,`/order`,`/product`,`/product/edit`,`/product/new`,`/setting`,].includes(appProps.router.pathname)
+        ||
+        appProps.router.pathname.startsWith(`/product`)
+       )
+    return (
+      <Layout>
           <Component {...pageProps} />
         </Layout>
       );
+      return <Component {...pageProps} />;
     };
 
   return (
     <ThemeProvider theme={lightTheme}>
+      <QueryClientProvider client={queryClient}>
       {getContent()}
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

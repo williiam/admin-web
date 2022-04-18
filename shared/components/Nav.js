@@ -160,7 +160,7 @@ export default function MiniDrawer({ children }) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>管理員設定</MenuItem>
-      <Link href="/login"><MenuItem onClick={handleMenuClose}>登出</MenuItem></Link>
+      <Link href="/"><MenuItem onClick={handleMenuClose}>登出</MenuItem></Link>
     </Menu>
   );
 
@@ -241,9 +241,11 @@ export default function MiniDrawer({ children }) {
           >
             <MenuIcon />
           </IconButton>
+          <Link href="/home">
           <Typography variant="h6" noWrap component="div">
             合作社團購系統後台管理
           </Typography>
+            </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

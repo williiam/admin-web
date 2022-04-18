@@ -38,6 +38,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Cascader from "../../shared/components/getProduct/Cascader";
 import {categories} from "../../shared/constants/product.js";
+import { DataGrid } from '@mui/x-data-grid';
 import * as api from "../../shared/utils/api";
 import { useRouter } from "next/router";
 import {
@@ -98,6 +99,51 @@ function a11yProps(index, tab) {
     value: tab,
   };
 }
+
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'firstName',
+    headerName: 'First name',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'lastName',
+    headerName: 'Last name',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'fullName',
+    headerName: 'Full name',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+    valueGetter: (params) =>
+      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+  },
+];
+
+const rows = [
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+];
 
 const defaultFilter = {
   sale_status: "",
@@ -173,16 +219,16 @@ export default function Product(props) {
                   <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
-                    value={filter.is_group_by}
+                    value={value}
                     onChange={handleTabChange}
                   >
                     <FormControlLabel
-                      value={false}
+                      value="female"
                       control={<Radio />}
                       label="單賣"
                     />
                     <FormControlLabel
-                      value={true}
+                      value="male"
                       control={<Radio />}
                       label="團購"
                     />
@@ -194,16 +240,16 @@ export default function Product(props) {
                   <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
-                    value={filter.has_variant}
+                    value={value}
                     onChange={handleTabChange}
                   >
                     <FormControlLabel
-                      value={false}
+                      value="female"
                       control={<Radio />}
                       label="單一規格"
                     />
                     <FormControlLabel
-                      value={true}
+                      value="male"
                       control={<Radio />}
                       label="多規格"
                     />
@@ -215,16 +261,16 @@ export default function Product(props) {
                   <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
-                    value={filter.has_discount}
+                    value={value}
                     onChange={handleTabChange}
                   >
                     <FormControlLabel
-                      value={false}
+                      value="female"
                       control={<Radio />}
                       label="原價"
                     />
                     <FormControlLabel
-                      value={true}
+                      value="male"
                       control={<Radio />}
                       label="折扣"
                     />
@@ -281,11 +327,6 @@ export default function Product(props) {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  value={filter.search_term}
-                  onChange={(e, newInputValue) =>setFilter({
-                    ...filter,
-                    search_term: e.target.value
-                  })}
                   id="outlined-search"
                   label="商品搜尋"
                   type="search"
@@ -295,7 +336,7 @@ export default function Product(props) {
                 <div>
                   <Cascader
                     options={categories}
-                    placeholder="以商品種類搜尋"
+                    placeholder="請選擇商品種類"
                     setDepartment={() => {}}
                     product={value}
                     setProduct={setValue}
@@ -350,11 +391,22 @@ export default function Product(props) {
                   <LinearProgress color="inherit" />
                 </Stack>
               ) : (
-                <Products
-                  products={products}
-                  filter={filter}
-                  refetch={refetch}
+                <div style={{ height: 400, width: '100%' }}>
+                    <div style={{ height: 400, width: '100%' }}>
+      <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ flexGrow: 1 }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  checkboxSelection
+                  disableSelectionOnClick
                 />
+                </div>
+                </div>
+                </div>
+              </div>
               )}
             </Item>
           </Grid>
